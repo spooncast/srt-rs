@@ -153,20 +153,25 @@ where
                 match connection.next_action(Instant::now()) {
                     ConnectionAction::ContinueUntil(timeout) => break Some(timeout),
                     ConnectionAction::Close => {
-                        if receiver.is_flushed() {
-                            info!(
-                                "{:?} Receiver flush and connection timeout",
-                                sender.settings().local_sockid
-                            );
-                            return;
-                        }
+                        // if receiver.is_flushed() {
+                        //     info!(
+                        //         "{:?} Receiver flush and connection timeout",
+                        //         sender.settings().local_sockid
+                        //     );
+                        //     return;
+                        // }
 
-                        trace!(
-                            "{:?} connection closed but waiting for receiver to flush",
+                        // trace!(
+                        //     "{:?} connection closed but waiting for receiver to flush",
+                        //     sender.settings().local_sockid
+                        // );
+
+                        // break None;
+                        info!(
+                            "{:?} connection closed",
                             sender.settings().local_sockid
                         );
-
-                        break None;
+                        return;
                     } // timeout
                     ConnectionAction::SendKeepAlive => sock
                         .send((
