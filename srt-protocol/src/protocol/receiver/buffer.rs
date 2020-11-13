@@ -183,7 +183,7 @@ impl RecvBuffer {
     /// `self.next_msg_ready_tsbpd(...).map(|_| self.next_msg().unwrap()`
     pub fn next_msg_tsbpd(&mut self, now: Instant) -> Option<(Instant, Bytes)> {
         self.next_msg_ready_tsbpd(now)
-            .map(|_| self.next_msg(now).unwrap())
+            .and_then(|_| self.next_msg(now))
     }
 
     /// Check if there is an available message, returning, and its origin timestamp it if found
