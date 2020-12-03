@@ -129,16 +129,17 @@ impl RecvBuffer {
         let pack = self.buffer.front().unwrap().as_ref().unwrap();
 
         if self.tsbpd_instant_from(now, pack.timestamp) <= now {
-            debug!(
-                "Message was deemed ready for release, Now={:?}, Ts={:?}, dT={:?}, Latency={:?}, buf.len={}, sn={}, npackets={}",
-                now - self.remote_clock.origin_time(),
-                pack.timestamp.as_duration(),
-                now - self.remote_clock.instant_from(now, pack.timestamp),
-                self.tsbpd_latency,
-                self.buffer.len(),
-                pack.seq_number,
-                msg_size,
-            );
+            // XXX panic! supplied instant is later than self
+            // debug!(
+            //     "Message was deemed ready for release, Now={:?}, Ts={:?}, dT={:?}, Latency={:?}, buf.len={}, sn={}, npackets={}",
+            //     now - self.remote_clock.origin_time(),
+            //     pack.timestamp.as_duration(),
+            //     now - self.remote_clock.instant_from(now, pack.timestamp),
+            //     self.tsbpd_latency,
+            //     self.buffer.len(),
+            //     pack.seq_number,
+            //     msg_size,
+            // );
             Some(msg_size)
         } else {
             None
