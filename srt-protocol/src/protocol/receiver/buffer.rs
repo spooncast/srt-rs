@@ -3,7 +3,7 @@ use std::fmt;
 use std::time::{Duration, Instant};
 
 use bytes::{Bytes, BytesMut};
-use log::{debug, info};
+use log::{info, warn};
 
 use crate::packet::PacketLocation;
 use crate::protocol::receiver::time::SynchronizedRemoteClock;
@@ -151,12 +151,16 @@ impl RecvBuffer {
     pub fn next_msg_ready(&self) -> Option<usize> {
         let first = self.buffer.front();
         if let Some(Some(first)) = first {
-            // we have a first packet, make sure it has the start flag set
-            assert!(
-                first.message_loc.contains(PacketLocation::FIRST),
-                "Packet seq={} was not marked as the first in it's message",
-                first.seq_number
-            );
+            // XXX we have a first packet, make sure it has the start flag set
+            // assert!(
+            //     first.message_loc.contains(PacketLocation::FIRST),
+            //     "Packet seq={} was not marked as the first in it's message",
+            //     first.seq_number
+            // );
+            if ! first.message_loc.contains(PacketLocation::FIRST) {
+                warn!("Packet seq={} was not marked as the first in it's message",
+                      first.seq_number);
+            }
 
             let mut count = 1;
 

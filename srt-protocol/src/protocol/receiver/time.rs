@@ -53,6 +53,8 @@ impl SynchronizedRemoteClock {
         self.time_base.instant_from(now, ts)
     }
 
+    // XXX
+    #[allow(dead_code)]
     pub fn origin_time(&self) -> Instant {
         self.time_base.origin_time()
     }
